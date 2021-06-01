@@ -1,0 +1,56 @@
+variables:
+     # 1. General 
+
+     'SubscriptionName': 'k919'
+     'ENV': 'DEV'
+     'Location': 'westeurope'
+     'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
+
+     # 2. VNET 
+     # Some of the params like Routes and NSG are defined in vnet.parameters.json
+
+     'VnetResourceGroupName': 'NetworkRG' # Vnet RG
+     'vnetName': 'VNet112'
+     'vnetAddressPrefix': '10.0.0.0/16'
+     'subnet1Name': 'Subnet112'
+     'subnet1Prefix': '10.0.0.0/24'
+     'NsgName': 'Nsg112'
+     'RouteTableName': 'KRouteTable112'
+   
+     # 3. VM 
+
+     # Some of the params like Data Disks, DNS Servers are defined in in VM.parameters.json 
+     # are we require Disk Names?
+
+     'virtualMachineName': 'VM119'
+     'ResourceGroupName': 'NewRG'  # VM RG
+     'adminUsername': 'Krassy'   # 'adminPaasword' configured in Library as SecureString
+     'vmSize' : 'Standard_D2s_V3' # Standard_B1s
+     'OSSKU': '2016-Datacenter'
+     'SPNID': '6b00e15f-ac07-4f91-9ffe-0442e6fac969'
+     'DiskType': 'Standard_LRS'   
+     'TimeZone': 'Central European Standard Time'
+
+      # 4. VM BootDiagnostics Storage Account, if not exist will be created  
+
+     'SAResourceGroupName': 'NewRG'
+     'storageAccountName': 'kr12stcacc12'  
+
+     # 5. Recovery Vault,  replace parameters in Enable_Backup.ps1 and Enable_Backup2.ps1 scripts
+
+     'RecoveryVaultName': 'KrassyRecoveryVault22'
+     'RecoveryVaultResourceGroupName': 'RecoveryVault'
+     'RecoveryVaultPolicy': 'DailyBackup'
+     'VMS': ("VM101","VM102","VM103","VM104","VM105","VM106") # Optional pass multiple VM's for backup
+      
+     # 6. VM Deploy when we have already Existing Vnet, DES, SA
+
+     # The velow vars are passed while VNET, DES, SA already exist, and we need only to provide  
+     # an existing SubnetID to bind to the VM NIC, DiskEncryptionSetID for Disk encryption
+     # an Existing Storage Account Name for Boot Diag, by default storageAccountName 
+     # declared on point 4. line 37 is passed 
+
+     'subnetid': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
+     'DiskEncryptionSetId': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
+ 
+

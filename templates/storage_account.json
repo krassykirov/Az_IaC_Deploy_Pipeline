@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify the storage account name"
+      }
+    },
+    "subnetRefID": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet ID Reference for NetworkAcls"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify a location for the resources",
+        "defaultvalue":  "West Europe"
+      }
+    },
+    "storageSKU": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS"
+      ],
+      "metadata": {
+        "description": "Specify the storage account type"
+      }
+    }
+  },
+ "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('storageSKU')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [
+            {
+              "id": "[parameters('subnetRefID')]",
+              "action": "Allow"
+            }
+          ],
+          "ipRules": [],
+          "defaultAction": "Deny"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "allowBlobPublicAccess": false,
+        "minimumTlsVersion": "TLS1_2",
+        "AllowSharedKeyAccess": true
+      }
+    }
+  ],
+  "outputs": {}
+}

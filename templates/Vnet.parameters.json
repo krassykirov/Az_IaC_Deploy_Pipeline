@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "routes": {
+      "value": [
+        {
+          "name": "KNET",
+          "properties": {
+            "addressPrefix": "10.0.0.0/8",
+            "nextHopType": "VirtualAppliance",
+            "nextHopIpAddress": "10.143.248.78"
+          }
+        },
+        {
+          "name": "Internet",
+          "properties": {
+            "addressPrefix": "0.0.0.0/0",
+            "nextHopType": "VirtualAppliance",
+            "nextHopIpAddress": "10.143.248.77"
+          }
+        },
+        {
+          "name": "RedirectCoreSubnets01",
+          "properties": {
+            "addressPrefix": "10.0.0.0/24",
+            "nextHopType": "VirtualAppliance",
+            "nextHopIpAddress": "10.143.248.78"
+          }
+        }
+      ]
+    },
+    "securityRules": {
+      "value": [
+        {
+          "name": "RDP3",
+          "properties": {
+            "description": "Allows 3389",
+            "protocol": "Tcp",
+            "sourcePortRange": "*",
+            "destinationPortRange": "3389",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
+            "access": "Allow",
+            "priority": 100,
+            "direction": "Inbound"
+          }
+        }
+      ]
+    }
+  }
+}

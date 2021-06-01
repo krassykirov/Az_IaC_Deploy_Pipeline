@@ -1,0 +1,42 @@
+name: AzureArmDeployment
+trigger: none
+pool: 
+  name: 'KrassyHosted'
+variables: 
+  - template: 'vars.yml'
+
+jobs:
+ - job: EnableVMBackup
+   displayName: 'Enable Backup for Multiple VMS'
+   steps:
+     - task: azurepowershell@5
+       continueOnError: false
+       name: 'EnableBackup'
+       inputs:
+         azureSubscription: PythonSPN
+         scriptType: filepath
+         azurePowerShellVersion: latestversion
+         errorActionPreference: stop
+         ScriptPath: 'templates/Enable_Backup2.ps1'
+         ScriptArguments: 
+             -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
+             -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
+             -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
+             -subscriptionId $(subscriptionId)
+             -VMS ${{ variables.VMS }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

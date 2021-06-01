@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDisksNames": {
+      "value": [ "Data", "LOGS" ]
+    },
+    "sizeOfDataDisksInGB": {
+      "value": [ 4, 16 ]
+    },
+    "DNSServerAddress": {
+      "value": [ "10.0.0.101", "10.0.10.102", "10.0.0.103" ]
+    },
+    "VmTags": {
+      "value": {
+        "AppOwnerGroupName": "KrassyInDeployment@krassy.net",
+        "Domain": "krassy.net",
+        "FunctionalDescription": "Testing VM Tags",
+        "ApplicationContact": "Cylons@hiddennebula.kr"
+      }
+    }
+  }
+}

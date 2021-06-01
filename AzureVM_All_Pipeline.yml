@@ -1,0 +1,173 @@
+name: Azure VM Deployment
+trigger: none
+pool: 
+  name: 'KrassyHosted'
+variables: 
+  - template: 'vars.yml'
+  - group: myVars
+
+jobs:
+  - job: VnetDeployment
+    displayName: 'Deploy VNET'
+    continueOnError: false
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: 'Deploy VNET'
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: 'PythonSPN'
+        subscriptionId: $(subscriptionId)
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: $(VnetResourceGroupName)
+        location: 'west europe'
+        templateLocation: 'Linked artifact'
+        csmFile: 'templates/vnet.json'
+        csmParametersFile: 'templates/vnet.parameters.json'
+        overrideParameters: '-VnetResourceGroupName $(VnetResourceGroupName) -vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -RouteTableName $(RouteTableName) -NsgName $(NsgName)' 
+        deploymentMode: 'Incremental'
+        deploymentName: 'AzureArm-Pipeline'
+        deploymentOutputs: 'armOutputs'
+  
+    - task: PowerShell@2
+      name: armOutputs
+      displayName: 'Configure ARM outputs'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $var = ConvertFrom-Json '$(armOutputs)'
+          Write-Output "$env:armOutputs"
+          $output = ConvertTo-Json $var.vNetName.value -Compress -Depth 4 
+          $subnetid = ConvertTo-Json $var.SubnetIdReference.value
+          Write-Output $output
+          Write-Output $subnetid
+          Write-Output "##vso[task.setvariable variable=vNetName;isOutput=true;]$output"
+          Write-Output "##vso[task.setvariable variable=subnetid;isOutput=true;]$subnetid"
+   # To see if PeerVnet should stay as separate Job or a task under VnetDeployment
+  - job: PeerVnet
+    dependsOn: VnetDeployment
+    steps:
+    - task: AzurePowerShell@5
+      displayName: 'PeerVnet'
+      continueOnError: false
+      name: 'PeerVnet'
+      inputs:
+          azureSubscription: PythonSPN
+          scriptType: FilePath
+          azurePowerShellVersion: LatestVersion
+          errorActionPreference: stop
+          ScriptPath: 'templates/PeerVnet.ps1'
+          ScriptArguments: 
+              -vNetName ${{ variables.vnetName }}
+              -VnetResourceGroupName ${{ variables.VnetResourceGroupName }}
+
+  - job: DeployStorageAccount
+    displayName: 'Deploy Storage Account'
+    dependsOn: 
+        - VnetDeployment
+        - PeerVnet
+    variables:
+           subnetid: $[ dependencies.VnetDeployment.outputs['armOutputs.subnetid'] ]
+           #vNetName: $[ dependencies.VnetDeployment.outputs['armOutputs.vNetName'] ]
+    steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: 'Deploy Storage Account'
+        continueOnError: false
+        inputs:
+          deploymentScope: Resource Group
+          azureResourceManagerConnection: 'PythonSPN'
+          subscriptionId: $(subscriptionId)
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: $(SAResourceGroupName)
+          location: 'west europe'
+          templateLocation: 'Linked artifact'
+          csmFile: 'templates/storage_account.json'
+          overrideParameters: '-storageAccountName $(storageAccountName) -location $(location) -subnetRefID $(subnetid)'
+          deploymentMode: 'Incremental'
+          deploymentName: 'AzureArm-Pipeline'
+    
+  - job: CreateKeyVaultandDiskEncryptonSet
+    dependsOn: DeployStorageAccount
+    displayName: 'Create KeyVault and DiskEncryptonSet'
+    steps:
+      - task: AzurePowerShell@5
+        displayName: 'CreateKeyVault'
+        continueOnError: false
+        name: 'CreateKeyVault'
+        inputs:
+          azureSubscription: PythonSPN
+          scriptType: FilePath
+          azurePowerShellVersion: LatestVersion
+          errorActionPreference: stop
+          ScriptPath: 'templates/KeyVaultDiskEncryptonSet.ps1'
+          ScriptArguments: 
+              -Prefix ${{ variables.SubscriptionName }} `
+              -Env ${{ variables.Env }} `
+              -ResourceGroupName ${{ variables.ResourceGroupName }} `
+              -Location ${{ variables.Location}} `
+              -SPNID ${{ variables.SPNID }}
+
+  - job: VMDeployment
+    displayName: 'Deploy VM'
+    dependsOn: 
+           - CreateKeyVaultandDiskEncryptonSet
+           - VnetDeployment
+           - DeployStorageAccount
+    variables:
+          DiskEncryptionSetId: $[ dependencies.CreateKeyVaultandDiskEncryptonSet.outputs['CreateKeyVault.DiskEncryptionSetId'] ]
+          subnetid: $[ dependencies.VnetDeployment.outputs['armOutputs.subnetid'] ]
+    steps:
+       - task: AzureResourceManagerTemplateDeployment@3
+         displayName: 'Deploy VM'
+         continueOnError: false
+         inputs:
+            deploymentScope: Resource Group
+            azureResourceManagerConnection: 'PythonSPN'
+            subscriptionId: $(subscriptionId)
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: $(ResourceGroupName)
+            location: 'west europe'
+            templateLocation: 'Linked artifact'
+            csmFile: 'templates/VM.json'
+            csmParametersFile: 'templates/VM.parameters.json'
+            overrideParameters: '-ResourceGroupName $(ResourceGroupName) -diskEncryptionSetId $(DiskEncryptionSetId) -adminPassword $(vm_password) -adminUsername $(adminUsername) -virtualMachineName $(virtualMachineName) -diagnosticsStorageAccountName $(storageAccountName) -SubnetRef $(subnetid)'
+            deploymentMode: 'Incremental'
+            deploymentName: 'AzureArm-Pipeline'
+            deploymentOutputs: 'armOutputs'
+  
+  #- job: EnableVMBackup
+  #  dependsOn: VMDeployment
+  #  displayName: 'Enable Backup for VM'
+  #  steps:
+  #    - task: azurepowershell@5
+  #      continueOnError: false
+  #      name: 'EnableBackup'
+  #      inputs:
+  #        azureSubscription: PythonSPN
+  #        scriptType: filepath
+  #        azurePowerShellVersion: latestversion
+  #        errorActionPreference: stop
+  #        ScriptPath: 'templates/Enable_Backup_with_RV'
+  #        ScriptArguments: 
+  #            -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
+  #            -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
+  #            -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
+  #            -VmResourceGroup ${{ variables.ResourceGroupName }} `
+  #            -VmName ${{ variables.virtualMachineName }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
