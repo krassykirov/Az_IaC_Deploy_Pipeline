@@ -1,9 +1,0 @@
-variables:
-     # Below are used while VNET, KeyVault, DES, SA already exist, and we need only to provide  
-     # an existing SubnetID to bind to VM NIC and DiskEncryptionSetID for Disk encryption
-     # Same for the Storage Account for Boot Diagnostic provide a name of an existing one
-
-     'subnetid': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
-     'DiskEncryptionSetId': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
-     'storageAccountName': 'kr12stcacc12'  
-
