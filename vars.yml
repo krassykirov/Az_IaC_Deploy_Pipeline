@@ -22,10 +22,10 @@ variables:
      # Some of the params like Data Disks, DNS Servers are defined in in VM.parameters.json 
      # are we require Disk Names?
 
-     'virtualMachineName': 'VM119'
+     'virtualMachineName': 'VM22'
      'ResourceGroupName': 'NewRG'  # VM RG
      'adminUsername': 'Krassy'   # 'adminPaasword' configured in Library as SecureString
-     'vmSize' : 'Standard_D2s_V3' # Standard_B1s
+     'vmSize' : 'Standard_B1s' # Standard_D2s_V3
      'OSSKU': '2016-Datacenter'
      'SPNID': '6b00e15f-ac07-4f91-9ffe-0442e6fac969'
      'DiskType': 'Standard_LRS'   
@@ -41,7 +41,7 @@ variables:
      'RecoveryVaultName': 'KrassyRecoveryVault22'
      'RecoveryVaultResourceGroupName': 'RecoveryVault'
      'RecoveryVaultPolicy': 'DailyBackup'
-     'VMS': ("VM101","VM102","VM103","VM104","VM105","VM106") # Optional pass multiple VM's for backup
+     'VMS': ("VM101","VM102","VM114","VM115","VM116","VM22") # Optional pass multiple VM's for backup
       
      # 6. VM Deploy when we have already Existing Vnet, DES, SA
 

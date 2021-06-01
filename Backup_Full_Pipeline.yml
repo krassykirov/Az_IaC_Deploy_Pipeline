@@ -14,10 +14,10 @@ jobs:
        name: 'EnableBackup'
        inputs:
          azureSubscription: PythonSPN
-         scriptType: filepath
+         scriptType: filePath
          azurePowerShellVersion: latestversion
-         errorActionPreference: stop
-         ScriptPath: 'templates/Enable_Backup2.ps1'
+         errorActionPreference: Continue
+         ScriptPath: 'templates/Enable_Backup_with_RV.ps1'
          ScriptArguments: 
              -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
              -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `

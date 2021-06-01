@@ -35,11 +35,12 @@ If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmp
 
     if ((Get-AzRecoveryServicesBackupStatus -Name $VmName -ResourceGroupName $VmResourceGroup -Type AzureVM -ErrorAction SilentlyContinue).BackedUp)
     {
-        Write-Output "$VmName is already under backup!"
+        Write-Verbose -message ("$($VM.Name) is already under backup") -Verbose
     }
     else
     {
-        Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $VmName -ResourceGroupName $VmResourceGroup 
+        Write-Verbose -message ("Enabling Backup on $($VmName)") -Verbose
+        Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName -ErrorAction Continue
     }
 
 }

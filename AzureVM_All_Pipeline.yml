@@ -146,7 +146,7 @@ jobs:
   #        scriptType: filepath
   #        azurePowerShellVersion: latestversion
   #        errorActionPreference: stop
-  #        ScriptPath: 'templates/Enable_Backup_with_RV'
+  #        ScriptPath: 'templates/Enable_Backup_with_RV.ps1'
   #        ScriptArguments: 
   #            -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
   #            -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `

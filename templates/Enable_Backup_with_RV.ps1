@@ -103,17 +103,18 @@ If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmp
 
             if ($VM -eq $null)
             {
-                Write-Output "$($VirtualMachine) does not exist!" 
+                Write-Verbose -message ("$($VirtualMachine) does not exist!") -Verbose
                 Continue 
             }
             elseif ((Get-AzRecoveryServicesBackupStatus -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName -Type AzureVM -ErrorAction SilentlyContinue).BackedUp)
             {
-              Write-Output "$($VM.Name) is already under backup." 
+              Write-Verbose -message ("$($VM.Name) is already under backup") -Verbose
               Continue
             }
             else
-            {
-                Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName
+            { 
+               Write-Verbose -message ("Enable Backup on $($VM.Name)") -Verbose
+               Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName -ErrorAction Continue
             }
         }
      }
