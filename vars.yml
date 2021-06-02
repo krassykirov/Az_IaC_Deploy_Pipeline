@@ -1,7 +1,7 @@
 variables:
      # 1. General 
 
-     'SubscriptionName': 'koce20'
+     'SubscriptionName': 'z21'
      'ENV': 'DEV'
      'Location': 'westeurope'
      'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
