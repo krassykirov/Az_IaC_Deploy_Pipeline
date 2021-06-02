@@ -4,7 +4,7 @@ variables:
      'SubscriptionName': 'z21'
      'ENV': 'DEV'
      'Location': 'westeurope'
-     'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
+     'subscriptionId': 'xxxxxxxxxxxxxxxxx'
 
      # 2. VNET 
      # Some of the params like Routes and NSG are defined in vnet.parameters.json
