@@ -50,7 +50,7 @@ variables:
      # an Existing Storage Account Name for Boot Diag, by default storageAccountName 
      # declared on point 4. line 37 is passed 
      
-     'subnetid': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
-     'DiskEncryptionSetId': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
+     'subnetid': "/subscriptions/xxxxxxxxxxxxxxxxxxxxxxxxx/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
+     'DiskEncryptionSetId': "/subscriptions/xxxxxxxxxxxxxxx/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
  
 
