@@ -19,8 +19,9 @@ jobs:
          errorActionPreference: Continue
          ScriptPath: 'templates/Enable_Backup_with_RV.ps1'
          ScriptArguments: 
-             -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
-             -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
-             -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
-             -subscriptionId $(subscriptionId)
-             -VMS ${{ variables.VMS }}
+              -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
+              -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
+              -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
+              -VMS ${{ variables.VMS }}
+
+

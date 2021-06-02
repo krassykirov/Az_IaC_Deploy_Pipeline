@@ -8,19 +8,8 @@ $RecoveryVaultResourceGroupName,
 [Parameter(Mandatory=$false)]
 $RecoveryVaultPolicy,
 [Parameter(Mandatory=$false)]
-$subscriptionId,  
-[Parameter(Mandatory=$false)]
 [string[]]$VMS
 )
-
-try
-{
-  Set-AzContext -SubscriptionId $subscriptionId
-}
-catch
-{
-  Write-Error -Message "Unable to Get Azure Subscription. Details: $_" -ErrorAction Stop
-}
 
 If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmpty($RecoveryVaultResourceGroupName)) -and (!([string]::IsNullOrEmpty($RecoveryVaultPolicy)))))
 {
@@ -97,13 +86,13 @@ If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmp
             Write-Error -Message "Unable to Get RecoveryServicesPolicy. Details: $_" -ErrorAction Stop
         }
 
-        foreach ($VirtualMachine in $VMS)
+        foreach ($VirtualMachineName in $VMS)
         {
-            $VM = Get-AzVM -name $VirtualMachine
+            $VM = Get-AzVM -name $VirtualMachineName
 
             if ($VM -eq $null)
             {
-                Write-Verbose -message ("$($VirtualMachine) does not exist!") -Verbose
+                Write-Verbose -message ("$VirtualMachineName does not exist!") -Verbose
                 Continue 
             }
             elseif ((Get-AzRecoveryServicesBackupStatus -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName -Type AzureVM -ErrorAction SilentlyContinue).BackedUp)

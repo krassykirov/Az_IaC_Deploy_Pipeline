@@ -8,9 +8,9 @@ $RecoveryVaultResourceGroupName,
 [Parameter(Mandatory=$false)]
 $RecoveryVaultPolicy,
 [Parameter(Mandatory=$false)]
-$VmResourceGroup,  
+$ResourceGroupName,
 [Parameter(Mandatory=$false)]
-$VmName
+$virtualMachineName
 )
 
 If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmpty($RecoveryVaultResourceGroupName)) -and (!([string]::IsNullOrEmpty($RecoveryVaultPolicy)))))
@@ -32,15 +32,15 @@ If (!([string]::IsNullOrEmpty($RecoveryVaultName)) -and (!([string]::IsNullOrEmp
     {
           Write-Error -Message "Unable to Get RecoveryServicesPolicy. Details: $_" 
     }
-
-    if ((Get-AzRecoveryServicesBackupStatus -Name $VmName -ResourceGroupName $VmResourceGroup -Type AzureVM -ErrorAction SilentlyContinue).BackedUp)
+    
+    if ((Get-AzRecoveryServicesBackupStatus -Name $virtualMachineName -ResourceGroupName $ResourceGroupName -Type AzureVM -ErrorAction SilentlyContinue).BackedUp)
     {
-        Write-Verbose -message ("$($VM.Name) is already under backup") -Verbose
+        Write-Verbose -message ("$($virtualMachineName) is already under backup") -Verbose
     }
     else
     {
-        Write-Verbose -message ("Enabling Backup on $($VmName)") -Verbose
-        Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName -ErrorAction Continue
+        Write-Verbose -message ("Enabling Backup on $($virtualMachineName)") -Verbose
+        Enable-AzRecoveryServicesBackupProtection -Policy $Policy -Name $virtualMachineName -ResourceGroupName $ResourceGroupName -ErrorAction Continue
     }
 
 }

@@ -24,9 +24,6 @@
     "storageSKU": {
       "type": "string",
       "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Standard_LRS"
-      ],
       "metadata": {
         "description": "Specify the storage account type"
       }
@@ -53,7 +50,7 @@
             }
           ],
           "ipRules": [],
-          "defaultAction": "Deny"
+          "defaultAction": "Allow"
         },
         "supportsHttpsTrafficOnly": true,
         "allowBlobPublicAccess": false,
