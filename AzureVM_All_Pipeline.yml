@@ -129,7 +129,7 @@ jobs:
             templateLocation: 'Linked artifact'
             csmFile: 'templates/VM.json'
             csmParametersFile: 'templates/VM.parameters.json'
-            overrideParameters: '-ResourceGroupName $(ResourceGroupName) -diskEncryptionSetId $(DiskEncryptionSetId) -adminPassword $(vm_password) -adminUsername $(adminUsername) -virtualMachineName $(virtualMachineName) -diagnosticsStorageAccountName $(storageAccountName) -SubnetRef $(subnetid) -vmSize $(vmSize) -windowsOSVersion $(windowsOSVersion)'
+            overrideParameters: '-ResourceGroupName $(ResourceGroupName) -diskEncryptionSetId $(DiskEncryptionSetId) -adminPassword $(vm_password) -adminUsername $(adminUsername) -diagnosticsStorageAccountName $(storageAccountName) -SubnetRef $(subnetid) -vmSize $(vmSize) -windowsOSVersion $(windowsOSVersion)'
             deploymentMode: 'Incremental'
             deploymentName: 'AzureArm-Pipeline'
             deploymentOutputs: 'armOutputs'

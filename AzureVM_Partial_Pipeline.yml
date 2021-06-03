@@ -1,0 +1,52 @@
+name: AzureArmDeployment
+trigger: none
+pool: 
+  name: 'KrassyHosted'
+variables: 
+  - template: 'vars.yml'
+  - group: myVars
+
+jobs:
+  - job: VMDeployment
+    continueOnError: false
+    variables:
+          virtualMachineName: ${{ variables.virtualMachineName }} 
+          DiskEncryptionSetId: ${{ variables.DiskEncryptionSetId }}
+          subnetid: ${{ variables.subnetid }}
+    steps:
+       - task: AzureResourceManagerTemplateDeployment@3
+         displayName: 'Deploy VM'
+         inputs:
+            deploymentScope: Resource Group
+            azureResourceManagerConnection: 'PythonSPN'
+            subscriptionId: $(subscriptionId)
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: $(ResourceGroupName)
+            location: 'west europe'
+            templateLocation: 'Linked artifact'
+            csmFile: 'templates/VM.json'
+            csmParametersFile: 'templates/VM.parameters.json'
+            overrideParameters: '-ResourceGroupName $(ResourceGroupName) -diskEncryptionSetId $(DiskEncryptionSetId) -adminPassword $(vm_password) -adminUsername $(adminUsername) -diagnosticsStorageAccountName $(storageAccountName) -SubnetRef $(subnetid) -vmSize $(vmSize) -windowsOSVersion $(windowsOSVersion)'
+            deploymentMode: 'Incremental'
+            deploymentName: 'AzureArm-VMDeployment'
+
+  #- job: EnableVMBackup
+  #  dependsOn: VMDeployment
+  #  displayName: 'Enable Backup for VM'
+  #  steps:
+  #    - task: azurepowershell@5
+  #      continueOnError: false
+  #      name: 'EnableBackup'
+  #      inputs:
+  #        azureSubscription: PythonSPN
+  #        scriptType: filepath
+  #        azurePowerShellVersion: latestversion
+  #        errorActionPreference: stop
+  #        ScriptPath: 'templates/Enable_Backup_no_RV.ps1'
+  #        ScriptArguments: 
+  #            -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
+  #            -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
+  #            -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
+  #            -virtualMachineName ${{ variables.virtualMachineName }} `
+  #            -ResourceGroupName ${{ variables.ResourceGroupName }}
+

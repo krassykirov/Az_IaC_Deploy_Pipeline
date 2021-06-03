@@ -5,7 +5,7 @@
     "ResourceGroupName": {
       "type": "string",
       "metadata": {
-        "description": "ResourceGroupName where VM will be deployed"
+        "description": "ResourceGroupName where VMs will be deployed"
       }
     },
     "location": {
@@ -16,9 +16,9 @@
       }
     },
     "virtualMachineName": {
-      "type": "string",
+      "type": "array",
       "metadata": {
-        "description": "Name of the virtual machine"
+        "description": "Array with the names of the virtual machines"
       }
     },
     "adminPassword": {
@@ -36,7 +36,7 @@
     "vmSize": {
       "type": "string",
       "metadata": {
-        "description": "Size for the virtual machine."
+        "description": "Size for the virtual machine e.g Standard_D2s_V3."
       }
     },
     "sizeOfDataDisksInGB": {
@@ -82,13 +82,16 @@
   "variables": {
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
-    "nicName": "[concat(parameters('virtualMachineName'),'-Nic')]",
     "diskCaching": "ReadWrite"
   },
   "resources": [
     {
-      "name": "[variables('nicName')]",
+      "name": "[concat(parameters('virtualMachineName')[copyIndex()], '-nic')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "copy": {
+        "name": "nicLoop",
+        "count": "[length(parameters('virtualMachineName'))]"
+      },
       "apiVersion": "2019-04-01",
       "location": "[resourceGroup().location]",
       "comments": "Network Interface",
@@ -112,11 +115,15 @@
     {
       "apiVersion": "2019-07-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('virtualMachineName')]",
+      "name": "[parameters('virtualMachineName')[copyIndex()]]",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[length(parameters('virtualMachineName'))]"
+      },
       "location": "[parameters('location')]",
       "tags": "[parameters('VmTags')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+        "nicLoop"
       ],
       "properties": {
         "licenseType": "Windows_Server",
@@ -124,7 +131,7 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[parameters('virtualMachineName')]",
+          "computerName": "[parameters('virtualMachineName')[copyIndex()]]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -142,7 +149,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "[concat(parameters('virtualMachineName'), '-OSDisk')]",
+            "name": "[concat(parameters('virtualMachineName')[copyIndex()], '-OSDisk')]",
             "createOption": "FromImage",
             "managedDisk": {
               "storageAccountType": "StandardSSD_LRS",
@@ -158,7 +165,7 @@
               "input": {
                 "lun": "[copyIndex('dataDisks')]",
                 "diskSizeGB": "[parameters('sizeOfDataDisksInGB')[copyIndex('dataDisks')]]",
-                "name": "[concat(parameters('virtualMachineName'),'-',parameters('DataDisksNames')[copyIndex('dataDisks')])]",
+                "name": "[concat(parameters('virtualMachineName')[copyIndex()],'-',parameters('DataDisksNames')[copyIndex('dataDisks')])]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "StandardSSD_LRS",
@@ -173,7 +180,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('VirtualMachineName')[copyIndex()], '-nic'))]"
             }
           ]
         }
