@@ -30,23 +30,23 @@ jobs:
             deploymentMode: 'Incremental'
             deploymentName: 'AzureArm-VMDeployment'
 
-  #- job: EnableVMBackup
-  #  dependsOn: VMDeployment
-  #  displayName: 'Enable Backup for VM'
-  #  steps:
-  #    - task: azurepowershell@5
-  #      continueOnError: false
-  #      name: 'EnableBackup'
-  #      inputs:
-  #        azureSubscription: PythonSPN
-  #        scriptType: filepath
-  #        azurePowerShellVersion: latestversion
-  #        errorActionPreference: stop
-  #        ScriptPath: 'templates/Enable_Backup_no_RV.ps1'
-  #        ScriptArguments: 
-  #            -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
-  #            -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
-  #            -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
-  #            -virtualMachineName ${{ variables.virtualMachineName }} `
-  #            -ResourceGroupName ${{ variables.ResourceGroupName }}
+  - job: EnableVMBackup
+    dependsOn: VMDeployment
+    displayName: 'Enable Backup for VM'
+    steps:
+      - task: azurepowershell@5
+        continueOnError: false
+        name: 'EnableBackup'
+        inputs:
+          azureSubscription: PythonSPN
+          scriptType: filepath
+          azurePowerShellVersion: latestversion
+          errorActionPreference: stop
+          ScriptPath: 'templates/Enable_Backup_no_RV.ps1'
+          ScriptArguments: 
+              -RecoveryVaultName ${{ variables.RecoveryVaultName }} `
+              -RecoveryVaultResourceGroupName ${{ variables.RecoveryVaultResourceGroupName }} `
+              -RecoveryVaultPolicy ${{ variables.RecoveryVaultPolicy }} `
+              -VMS ${{ variables.VMS }}
+              -ResourceGroupName ${{ variables.ResourceGroupName }}
 

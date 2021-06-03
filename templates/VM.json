@@ -15,7 +15,7 @@
         "description": "Location for all resources."
       }
     },
-    "virtualMachineName": {
+    "VMNames": {
       "type": "array",
       "metadata": {
         "description": "Array with the names of the virtual machines"
@@ -86,11 +86,11 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('virtualMachineName')[copyIndex()], '-nic')]",
+      "name": "[concat(parameters('VMNames')[copyIndex()], '-nic')]",
       "type": "Microsoft.Network/networkInterfaces",
       "copy": {
         "name": "nicLoop",
-        "count": "[length(parameters('virtualMachineName'))]"
+        "count": "[length(parameters('VMNames'))]"
       },
       "apiVersion": "2019-04-01",
       "location": "[resourceGroup().location]",
@@ -115,10 +115,10 @@
     {
       "apiVersion": "2019-07-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('virtualMachineName')[copyIndex()]]",
+      "name": "[parameters('VMNames')[copyIndex()]]",
       "copy": {
         "name": "virtualMachineLoop",
-        "count": "[length(parameters('virtualMachineName'))]"
+        "count": "[length(parameters('VMNames'))]"
       },
       "location": "[parameters('location')]",
       "tags": "[parameters('VmTags')]",
@@ -131,7 +131,7 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[parameters('virtualMachineName')[copyIndex()]]",
+          "computerName": "[parameters('VMNames')[copyIndex()]]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -149,7 +149,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "[concat(parameters('virtualMachineName')[copyIndex()], '-OSDisk')]",
+            "name": "[concat(parameters('VMNames')[copyIndex()], '-OSDisk')]",
             "createOption": "FromImage",
             "managedDisk": {
               "storageAccountType": "StandardSSD_LRS",
@@ -165,7 +165,7 @@
               "input": {
                 "lun": "[copyIndex('dataDisks')]",
                 "diskSizeGB": "[parameters('sizeOfDataDisksInGB')[copyIndex('dataDisks')]]",
-                "name": "[concat(parameters('virtualMachineName')[copyIndex()],'-',parameters('DataDisksNames')[copyIndex('dataDisks')])]",
+                "name": "[concat(parameters('VMNames')[copyIndex()],'-',parameters('DataDisksNames')[copyIndex('dataDisks')])]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "StandardSSD_LRS",
@@ -180,7 +180,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('VirtualMachineName')[copyIndex()], '-nic'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('VMNames')[copyIndex()], '-nic'))]"
             }
           ]
         }

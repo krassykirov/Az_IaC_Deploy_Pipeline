@@ -2,7 +2,7 @@ variables:
      ###################################################################################
      # 1. General Vars                                                                 
      ###################################################################################
-     'SubscriptionName': 'lm19'
+     'SubscriptionName': 'bmx19'
      'ENV': 'DEV'
      'Location': 'westeurope'
      'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
@@ -45,7 +45,7 @@ variables:
      'RecoveryVaultName': 'KrassyRecoveryVault22'
      'RecoveryVaultResourceGroupName': 'RecoveryVault'
      'RecoveryVaultPolicy': 'DailyBackup'
-     'VMS': ("VM101","VM21","VM37","VM40") # VM Array for Backup
+     'VMS': ("VM4","VM5","VM6","VM7","VM3") # VM Array for Backup
       
      ########################################################################################
      # 6. VM Deploy when we have already Existing Vnet, DES, SA created so the VNET, DES, SA already exist,
