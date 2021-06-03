@@ -2,10 +2,10 @@
 Param(
 
 $Prefix = $SubscriptionName,
-$ResourceGroupName, # ='VMs',
-$ENV, # = "Dev",
-$Location, # = 'west europe',
-$SPNID # = '6b00e15f-ac07-4f91-9ffe-0442e6fac969'
+$ResourceGroupName, 
+$ENV,
+$Location, 
+$SPNID 
   
 )
 
