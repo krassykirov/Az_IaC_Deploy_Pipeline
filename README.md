@@ -1,5 +1,5 @@
 # Introduction 
-Deploy Azure VM via Azure Devops Pipeline
+Deploy Azure VM and related resources via Azure Devops Pipeline
 
 # Jobs sequence and methods used for deployment 
 
