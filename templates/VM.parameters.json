@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VMNames": {
-      "value": [ "VM3","VM4","VM6" ]
+      "value": [ "VM3","VM4" ]
     },
     "DataDisksNames": {
       "value": [ "Data", "LOGS", "Backup" ]
