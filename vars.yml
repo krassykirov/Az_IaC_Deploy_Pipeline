@@ -2,7 +2,7 @@ variables:
      ###################################################################################
      # 1. General Vars                                                                 
      ###################################################################################
-     'SubscriptionName': 'pp19' # Used for KeyVault and DES
+     'SubscriptionName': 'pp21' # Used for KeyVault and DES
      'ENV': 'DEV'
      'Location': 'westeurope'
      'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
@@ -14,9 +14,9 @@ variables:
      # Some of the params like Routes and NSG are defined in vnet.parameters.json      
      ####################################################################
      'VnetResourceGroupName': 'NetworkRG' # Vnet RG
-     'vnetName': 'VNet19'
+     'vnetName': 'VNet21'
      'vnetAddressPrefix': '10.0.0.0/16'
-     'subnet1Name': 'Subnet117'
+     'subnet1Name': 'Subnet21'
      'subnet1Prefix': '10.0.0.0/24'
      'NsgName': 'Nsg19'
      'RouteTableName': 'KRouteTable21'
