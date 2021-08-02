@@ -1,5 +1,5 @@
 # Introduction 
-Deploy Multiple Azure VMs and related resources via Azure Devops Pipeline
+Deploy Multiple Azure VMs and related resources via Azure Devops Pipeline, PowerShell and ARM Templates
 
 # Jobs sequence and methods used for deployment 
 
