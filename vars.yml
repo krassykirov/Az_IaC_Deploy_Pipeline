@@ -5,8 +5,8 @@ variables:
      'SubscriptionName': 'pp21' # Used for KeyVault and DES
      'ENV': 'DEV'
      'Location': 'westeurope'
-     'subscriptionId': '3870461d-e844-4724-b06b-f221bb5b924d'
-     'SPNID': '6b00e15f-ac07-4f91-9ffe-0442e6fac969' # KeyVault Deploy/Access Policies SPN
+     'subscriptionId': 'YourSubscriptionID'
+     'SPNID': 'xxxxxxxxxxxxxxxxxxxxxxx' # KeyVault Deploy/Access Policies SPN
      ##################################################################
 
      ###################################################################
@@ -26,7 +26,7 @@ variables:
      # 3. VM 
      # Some of the params like Data Disks, DNS Servers are defined in in VM.parameters.json 
      #####################################################################
-     # 'virtualMachineName': 'VM23' , VM Names are provided as Array in VM.parameters.json
+     # 'virtualMachineNames': 'VM23' , VM Names are provided as Array in VM.parameters.json
      'ResourceGroupName': 'NewARM' # VM RG
      'adminUsername': 'Krassy'     # adminPaasword is in 'myVars' group in Library as SecureString
      'vmSize' : 'Standard_D1_v2'   #  Standard_B1s
@@ -51,12 +51,12 @@ variables:
      'VMS': ("VM2","VM4") # VM Array for Backup
       
      ######################################################################
-     # 6. VM Deploy when we have already Existing Vnet, DES, SA created so the VNET, DES, SA already exist,
-     # we need only to provide an existing SubnetID for the VM NIC, DiskEncryptionSetID for Disk encryption
+     # 6. VM Deploy when we have already Existing Vnet, DES, SA created,
+     # so we need only to provide an existing SubnetID for the VM NIC, DiskEncryptionSetID for Disk encryption
      # an Existing Storage Account Name for Boot Diag, by default storageAccountName is
      # declared on point 4. "storageAccountName" variable
      #####################################################################
-     'subnetid': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
-     'DiskEncryptionSetId': "/subscriptions/3870461d-e844-4724-b06b-f221bb5b924d/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
+     'subnetid': "/subscriptions/{SubscriptionID}/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
+     'DiskEncryptionSetId': "/subscriptions/{SubscriptionID}/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
      #####################################################################
 
