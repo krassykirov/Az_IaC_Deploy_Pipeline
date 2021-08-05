@@ -9,7 +9,7 @@
           "properties": {
             "addressPrefix": "10.0.0.0/8",
             "nextHopType": "VirtualAppliance",
-            "nextHopIpAddress": "10.143.248.78"
+            "nextHopIpAddress": "10.0.0.0"
           }
         },
         {
@@ -17,7 +17,7 @@
           "properties": {
             "addressPrefix": "0.0.0.0/0",
             "nextHopType": "VirtualAppliance",
-            "nextHopIpAddress": "10.143.248.77"
+            "nextHopIpAddress": "10.0.0.0"
           }
         },
         {
@@ -25,7 +25,7 @@
           "properties": {
             "addressPrefix": "10.0.0.0/24",
             "nextHopType": "VirtualAppliance",
-            "nextHopIpAddress": "10.143.248.78"
+            "nextHopIpAddress": "10.0.0.0"
           }
         }
       ]
