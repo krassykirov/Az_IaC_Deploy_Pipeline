@@ -57,6 +57,6 @@ variables:
      # declared on point 4. "storageAccountName" variable
      #####################################################################
      'subnetid': "/subscriptions/{SubscriptionID}/resourceGroups/NetworkRG/providers/Microsoft.Network/virtualNetworks/VNET2/subnets/Vnet2-Subnet"
-     'DiskEncryptionSetId': "/subscriptions/{SubscriptionID}/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/DE-Prod-DES-k109"
+     'DiskEncryptionSetId': "/subscriptions/{SubscriptionID}/resourceGroups/NetworkRGARM/providers/Microsoft.Compute/diskEncryptionSets/Prod-DES-k109"
      #####################################################################
 
