@@ -21,8 +21,8 @@ jobs:
         resourceGroupName: $(VnetResourceGroupName)
         location: 'west europe'
         templateLocation: 'Linked artifact'
-        csmFile: 'templates/vnet.json'
-        csmParametersFile: 'templates/vnet.parameters.json'
+        csmFile: 'templates/Vnet.json'
+        csmParametersFile: 'templates/Vnet.parameters.json'
         overrideParameters: '-VnetResourceGroupName $(VnetResourceGroupName) -vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -RouteTableName $(RouteTableName) -NsgName $(NsgName)' 
         deploymentMode: 'Incremental'
         deploymentName: 'AzureArm-Pipeline'
